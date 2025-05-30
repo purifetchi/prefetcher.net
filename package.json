@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "astro": "^5.7.13",
-    "astro-icon": "^1.1.5"
+    "astro-icon": "^1.1.5",
+    "three": "^0.176.0"
   },
   "devDependencies": {
-    "@iconify-json/ri": "^1.2.5"
+    "@iconify-json/ri": "^1.2.5",
+    "@types/three": "^0.176.0"
   }
 }

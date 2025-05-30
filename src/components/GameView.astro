@@ -1,0 +1,20 @@
+---
+
+---
+
+<div class="" id="game">
+
+</div>
+
+<script>
+    import Game from '../game/game';
+    import BoxObject from '../game/objects/boxObject';
+
+    const game = new Game({
+        element: document.getElementById("game")!
+    })
+
+    game.addObject(new BoxObject())
+    game.addObject(new BoxObject())
+    game.addObject(new BoxObject())
+</script>
