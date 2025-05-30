@@ -13,7 +13,7 @@ export default class Game {
     /**
      * This game's camera.
      */
-    _camera! : THREE.Camera
+    _camera! : THREE.PerspectiveCamera
 
     /**
      * The renderer responsible for rendering the scene.
@@ -47,13 +47,27 @@ export default class Game {
      */
     _setupThree() : void {
         this._scene = new THREE.Scene()
+
         this._camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000)
         this._camera.position.z = 5
+        
         this._renderer = new THREE.WebGLRenderer({ antialias: true })
         this._clock = new THREE.Clock(true);
 
         this._renderer.setSize(window.innerWidth, window.innerHeight)
         this._renderer.setAnimationLoop(this.render.bind(this))
+
+        window.addEventListener('resize', this._resize.bind(this))
+    }
+
+    /**
+     * Called when the viewport resizes.
+     */
+    _resize() : void {
+        this._camera.aspect = window.innerWidth / window.innerHeight
+        this._camera.updateProjectionMatrix()
+
+        this._renderer.setSize(window.innerWidth, window.innerHeight)
     }
 
     /**
@@ -61,8 +75,31 @@ export default class Game {
      * @param object The object to add.
      */
     addObject(object : GameObject) : void {
+        if (this.getObjectById(object.id) !== undefined) {
+            return
+        }
+
         this._objects = [ ...this._objects, object ]
         this._scene.add(object.threeObject)
+    }
+
+    /**
+     * Gets an object by its id.
+     * @param id The ID.
+     */
+    getObjectById(id : string) : GameObject | undefined {
+        const obj = this._objects.find(o => o.id == id)
+        return obj
+    }
+
+    /**
+     * Removes an object from the scene.
+     * @param object The object to remove.
+     */
+    removeObject(object : GameObject) : void {
+        this._objects = this._objects.filter(o => o.id != object.id)
+        this._scene.remove(object.threeObject)
+        object.destroy()
     }
 
     /**
