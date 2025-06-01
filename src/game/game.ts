@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import type GameObject from './objects/gameObject';
 import CameraObject from './objects/cameraObject';
 import Input from './input';
+import type TweenContract from './tweening/tweenContract';
 
 /**
  * The main class for the game. 
@@ -31,6 +32,11 @@ export default class Game {
      * The objects within this scene.
      */
     _objects : GameObject[] = []
+
+    /**
+     * The tweens within this scene.
+     */
+    _tweens : TweenContract[] = []
 
     /**
      * The raycaster.
@@ -72,8 +78,11 @@ export default class Game {
         this._renderer.setSize(window.innerWidth, window.innerHeight)
         this._renderer.setAnimationLoop(this.render.bind(this))
 
-        this._scene.add(new THREE.AmbientLight(new THREE.Color().setHex(0xffffff), 5))
+        const point = new THREE.PointLight(new THREE.Color().setHex(0xffffff), 7)
+        point.position.set(4, 6, 4)
+        this._scene.add(point)
 
+        this._scene.add(new THREE.AmbientLight(new THREE.Color().setHex(0xffffff), 1.3))
         this._input = new Input()
         this._raycaster = new THREE.Raycaster()
 
@@ -148,6 +157,22 @@ export default class Game {
     }
 
     /**
+     * Adds a tween.
+     * @param tween The tween to add.
+     */
+    addTween(tween : TweenContract) : void {
+        this._tweens.push(tween)
+    }
+
+    /**
+     * Removes a tween.
+     * @param tween The tween to remove.
+     */
+    removeTween(tween : TweenContract) : void {
+        this._tweens.filter(t => t != tween)
+    }
+
+    /**
      * Gets the input system.
      */
     get input() : Input {
@@ -155,13 +180,33 @@ export default class Game {
     }
 
     /**
+     * Steps all the tweens in the scene.
+     */
+    private _stepTweens(dt: number) : void {
+        const tweensToRemove = []
+        for (const tween of this._tweens) {
+            tween.step(dt)
+
+            if (!tween.active) {
+                tweensToRemove.push(tween)
+            }
+        }
+
+        for (const tween of tweensToRemove) {
+            this.removeTween(tween)
+        }
+    }
+
+    /**
      * Ticks all the objects and renders the scene.
      */
     render() : void {
-        const dt = this._clock.getDelta();
+        const dt = this._clock.getDelta()
         for (const object of this._objects) {
-            object.tick(dt);
+            object.tick(dt)
         }
+
+        this._stepTweens(dt)
         
         this._renderer.render(this._scene, this._camera.camera)
         this._input.reset()

@@ -9,7 +9,7 @@
         },
         {
             "type": "model",
-            "path": "/game/bed_single_A.obj",
+            "path": "/game/furniture/bed_single_A.obj",
             "scale": [1,1,1],
             "position": [5, 0.1, 0.7],
             "rotation": [0, -90, 0]

@@ -39,7 +39,7 @@ export default class GameObject {
     /**
      * Attaches this object to the THREE.JS scene.
      */
-    _attach() : void {
+    protected _attach() : void {
         this.game._scene.add(this.threeObject)
     }
     

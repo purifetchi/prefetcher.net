@@ -1,7 +1,7 @@
-import { OBJLoader } from "three/examples/jsm/Addons.js";
+import { MTLLoader, OBJLoader } from "three/examples/jsm/Addons.js";
 import GameObject from "./gameObject";
 import type GameObjectOptions from "./gameObjectOptions";
-import { Euler, Mesh, MeshNormalMaterial, Vector3 } from "three";
+import { Euler, Mesh, Vector3 } from "three";
 
 export default class ModelObject extends GameObject {
     constructor(opts : GameObjectOptions & {
@@ -15,16 +15,20 @@ export default class ModelObject extends GameObject {
 
         const { path, scale, position, rotation } = opts
         const objLoader = new OBJLoader()
+        const mtlLoader = new MTLLoader()
+        mtlLoader.load(path.replace(".obj", ".mtl"), data => {
+            objLoader.setMaterials(data)
+        })
+        
         objLoader.load(path, data => {
             data.scale.set(scale.x, scale.y, scale.z)
             data.position.set(position.x, position.y, position.z)
             data.setRotationFromEuler(new Euler(rotation.x, rotation.y, rotation.z))
             this.threeObject = data
 
-            const normalMaterial = new MeshNormalMaterial()
             data.traverse(child => {
                 if (child instanceof Mesh) {
-                    child.material = normalMaterial
+                    console.log(child.material)
                 }
             })
             
