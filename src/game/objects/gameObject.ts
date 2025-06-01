@@ -1,6 +1,7 @@
 import type { Object3D } from "three"
 import { v4 } from 'uuid' 
 import type GameObjectOptions from "./gameObjectOptions"
+import type Game from "../game"
 
 /**
  * The base game object.
@@ -17,6 +18,11 @@ export default class GameObject {
     threeObject! : Object3D
 
     /**
+     * 
+     */
+    game! : Game
+
+    /**
      * Does this local player have authority over the object?
      */
     hasAuthority : boolean
@@ -28,6 +34,13 @@ export default class GameObject {
         this.id = opts?.id ?? v4()
         this.hasAuthority = opts?.hasAuthority ?? false
         console.log(`[GameObject::constructor] Constructed object with id ${this.id} and authority ${this.hasAuthority}`)
+    }
+
+    /**
+     * Attaches this object to the THREE.JS scene.
+     */
+    _attach() : void {
+        this.game._scene.add(this.threeObject)
     }
     
     /**

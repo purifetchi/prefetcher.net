@@ -1,0 +1,18 @@
+{
+    "ents": [
+        {
+            "type": "model",
+            "path": "/game/room.obj",
+            "scale": [0.6, 0.6, 0.6],
+            "position": [3.2, 0, 3.2],
+            "rotation": [0, 0, 0]
+        },
+        {
+            "type": "model",
+            "path": "/game/bed_single_A.obj",
+            "scale": [1,1,1],
+            "position": [5, 0.1, 0.7],
+            "rotation": [0, -90, 0]
+        }
+    ]
+}

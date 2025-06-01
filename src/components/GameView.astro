@@ -8,13 +8,18 @@
 
 <script>
     import Game from '../game/game';
-    import BoxObject from '../game/objects/boxObject';
+    import AtaObject from '../game/objects/ataObject';
+    import LevelParser from '../game/levelParser';
+    import type Level from '../game/level/level';
 
     const game = new Game({
         element: document.getElementById("game")!
     })
 
-    game.addObject(new BoxObject())
-    game.addObject(new BoxObject())
-    game.addObject(new BoxObject())
+    game.addObject(new AtaObject({}))
+
+    const levelLoader = new LevelParser(game)
+    fetch('/game/map.json')
+        .then(r => r.json() as unknown as Level)
+        .then(l => levelLoader.load(l))
 </script>
