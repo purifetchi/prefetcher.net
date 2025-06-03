@@ -11,12 +11,14 @@
     import AtaObject from '../game/objects/ataObject';
     import LevelParser from '../game/levelParser';
     import type Level from '../game/level/level';
+import HandlesObject from '../game/objects/handlesObject';
 
     const game = new Game({
         element: document.getElementById("game")!
     })
 
     game.addObject(new AtaObject({}))
+    game.addObject(new HandlesObject({}))
 
     const levelLoader = new LevelParser(game)
     fetch('/game/map.json')
