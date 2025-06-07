@@ -17,7 +17,7 @@ export default class HandlesObject extends GameObject {
         }
 
         const cast = this.game.raycast()
-        if (cast.length > 0) {
+        if (cast.length > 0) {            
             const first = this._transformControls === undefined
             this._transformControls ??= new TransformControls(
                 this.game._camera.camera,
@@ -27,9 +27,26 @@ export default class HandlesObject extends GameObject {
                 this._attach()
             }
 
+            const intersectsAnyHandles = cast.find(c => {
+                let obj = c.object
+                while (obj !== null) {
+                    if (obj.parent == this.threeObject) {
+                        return true
+                    }
+
+                    obj = obj.parent!
+                }
+
+                return false
+            });
+
+            if (intersectsAnyHandles) {
+                return
+            }
+
             this._selected = cast[0].object
             this._transformControls.attach(this._selected)
-            console.log(`[HandlesObject::tick] ${this._selected} ${this._transformControls}`)
+            console.log(`[HandlesObject::tick] ${this._selected.name} ${this._transformControls}`)
         }
     }
 }
