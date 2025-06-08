@@ -44,6 +44,13 @@ export default class GameObject {
     }
     
     /**
+     * Called when the object gets added to the scene.
+     */
+    onSceneAdded() : void {
+
+    }
+
+    /**
      * Ticks this object's behavior.
      * @param dt The delta tine.
      */

@@ -9,14 +9,17 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@mary/events": "npm:@jsr/mary__events@^0.2.0",
     "@types/uuid": "^10.0.0",
     "astro": "^5.7.13",
     "astro-icon": "^1.1.5",
+    "dat.gui": "^0.7.9",
     "three": "^0.176.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@iconify-json/ri": "^1.2.5",
+    "@types/dat.gui": "^0.7.13",
     "@types/three": "^0.176.0"
   }
 }

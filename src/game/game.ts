@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import * as events from "@mary/events";
 import type GameObject from './objects/gameObject';
 import CameraObject from './objects/cameraObject';
 import Input from './input';
@@ -47,6 +48,13 @@ export default class Game {
      * The input class.
      */
     _input! : Input
+
+    /**
+     * An event stream for objects to subscribe to.
+     */
+    eventStream = new events.EventEmitter<{
+        objectAdded: [object: GameObject]
+    }>()
 
     /**
      * Constructs a new game.
@@ -112,6 +120,9 @@ export default class Game {
         if (object.threeObject !== undefined) {
             this._scene.add(object.threeObject)
         }
+
+        this.eventStream.emit('objectAdded', object)
+        object.onSceneAdded()
 
         return object
     }
