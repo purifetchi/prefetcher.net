@@ -2,6 +2,7 @@ import type { Object3D } from "three"
 import { v4 } from 'uuid' 
 import type GameObjectOptions from "./gameObjectOptions"
 import type Game from "../game"
+import { EventEmitter } from "@mary/events"
 
 /**
  * The base game object.
@@ -28,6 +29,13 @@ export default class GameObject {
     hasAuthority : boolean
 
     /**
+     * The event stream for this object.
+     */
+    eventStream = new EventEmitter<{
+        attached: []
+    }>()
+
+    /**
      * Constructs the game object.
      */
     constructor(opts?: GameObjectOptions) {
@@ -41,6 +49,7 @@ export default class GameObject {
      */
     protected _attach() : void {
         this.game._scene.add(this.threeObject)
+        this.eventStream.emit('attached')
     }
     
     /**
